@@ -7,12 +7,10 @@ namespace Cinema_webapp.Models
     {
         public int Id { get; set; }
         public DateTime StartTime { get; set; }
-        public DateTime EndTime => StartTime.AddMinutes(Movie.DurationMinutes);
+        public DateTime EndTime { get; set; }
         public int MovieId { get; set; }
+
+        public IEnumerable<Ticket> Tickets { get; set; }
         public Movie Movie { get; set; }
-        public int HallId { get; set; }
-        public Hall Hall { get; set; }
-        public int AvailableSeats { get; set; }
-        public List<Ticket> Tickets { get; set; }
     }
 }
