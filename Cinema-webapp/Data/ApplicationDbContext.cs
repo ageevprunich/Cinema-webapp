@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cinema_webapp.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public DbSet<Hall> Halls { get; set; }
         public DbSet<Movie> Movies { get; set; }
@@ -12,6 +12,7 @@ namespace Cinema_webapp.Data
         public DbSet<Seat> Seats { get; set; }
         public DbSet<Showtime> Showtimes { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
