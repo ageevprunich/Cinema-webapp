@@ -1,6 +1,6 @@
 ﻿namespace Cinema_webapp.Models
 {
-    public class Movie
+    public class Movie : BaseModelClass
     {
         public int Id { get; set; }
         public string Title { get; set; }

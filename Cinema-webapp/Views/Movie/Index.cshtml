@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Cinema_webapp.Models.Movie>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>List of movies</h1>
+
+@foreach (var movie in Model)
+{
+    <div class="movie-block">
+        <div class="movie-poster-block">
+            <img class="movie-poster"
+                 src="@Url.Content(movie.PosterUrl)"
+                 alt="movie poster" />
+        </div>
+        <div class="movie-info">
+            <p><span class="movie-name">@movie.Title</span></p>
+            <p class="movie-genre">@movie.Genre</p>
+            <p class="movie-rating">Rating: @movie.Rating</p>
+            <button class="showtime-button" type="button">
+                Showtime
+            </button>
+        </div>
+    </div>
+}
+
+

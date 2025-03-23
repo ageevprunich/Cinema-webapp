@@ -1,6 +1,6 @@
 ﻿namespace Cinema_webapp.Models
 {
-    public class Payment
+    public class Payment : BaseModelClass
     {
         public int Id { get; set; }
         public DateTime PaymentDate { get; set; }

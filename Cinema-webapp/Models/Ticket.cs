@@ -1,6 +1,6 @@
 ﻿namespace Cinema_webapp.Models
 {
-    public class Ticket
+    public class Ticket : BaseModelClass
     {
         public int Id { get; set; }
         public int ShowtimeId { get; set; }
