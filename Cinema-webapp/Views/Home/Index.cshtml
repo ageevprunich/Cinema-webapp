@@ -99,7 +99,7 @@
 <div class="hero-section">
     <h1>Welcome to Cinema Center</h1>
     <p>Choose a ticket to watch all the latest blockbusters in stunning quality!</p>
-    <a href="/Tickets" class="cta-button">Buy Ticket</a>
+    <a href="/Ticket" class="cta-button">Buy Ticket</a>
 </div>
 
 <!-- Секция фильмов -->
@@ -116,25 +116,25 @@
         </thead>
         <tbody>
             <tr>
-                <td>Oppenheimer</td>
+                <td><a href="/Movie">Oppenheimer</a></td>
                 <td>Історична драма</td>
                 <td>180 хв</td>
                 <td>26.07.2023</td>
             </tr>
             <tr>
-                <td>Dune: Part Two</td>
+                <td><a href="/Movie">Dune: Part Two</a></td>
                 <td>Фантастика</td>
                 <td>165 хв</td>
                 <td>29.02.2024</td>
             </tr>
             <tr>
-                <td>Kung Fu Panda 4</td>
+                <td><a href="/Movie">Kung Fu Panda 4</a></td>
                 <td>Анімація, пригоди</td>
                 <td>94 хв</td>
                 <td>07.03.2024</td>
             </tr>
             <tr>
-                <td>The Batman 2</td>
+                <td><a href="/Movie">The Batman 2</a></td>
                 <td>Бойовик, детектив</td>
                 <td>150 хв</td>
                 <td>2025</td>
@@ -143,92 +143,3 @@
     </table>
 </div>
 
-<!-- Добавь ниже остальных секций -->
-<div class="payment-section">
-    <h2>💳 Оплата квитка</h2>
-    <form method="post" action="/Payment/Submit">
-        <div class="form-group">
-            <label for="cardName">Ім’я на картці</label>
-            <input type="text" id="cardName" name="cardName" required />
-        </div>
-
-        <div class="form-group">
-            <label for="cardNumber">Номер картки</label>
-            <input type="text" id="cardNumber" name="cardNumber" maxlength="19" required placeholder="XXXX XXXX XXXX XXXX" />
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="expiry">Термін дії</label>
-                <input type="text" id="expiry" name="expiry" maxlength="5" required placeholder="MM/YY" />
-            </div>
-
-            <div class="form-group">
-                <label for="cvv">CVV</label>
-                <input type="password" id="cvv" name="cvv" maxlength="4" required />
-            </div>
-        </div>
-
-        <button type="submit" class="cta-button">Оплатити</button>
-    </form>
-</div>
-
-<style>
-    .payment-section {
-        padding: 60px 20px;
-        background-color: #1e1e2f;
-        color: #fff;
-        text-align: center;
-    }
-
-        .payment-section h2 {
-            font-size: 2rem;
-            color: #ffcc00;
-            margin-bottom: 30px;
-        }
-
-    form {
-        max-width: 500px;
-        margin: 0 auto;
-        text-align: left;
-        background-color: #2c2c3a;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #ffcc00;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            background-color: #3c3c50;
-            color: #fff;
-            font-size: 1rem;
-        }
-
-    .form-row {
-        display: flex;
-        gap: 20px;
-    }
-
-        .form-row .form-group {
-            flex: 1;
-        }
-
-    .form-group input:focus {
-        outline: none;
-        box-shadow: 0 0 5px #ffcc00;
-    }
-</style>
