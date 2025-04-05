@@ -6,7 +6,6 @@ namespace Cinema_webapp.Models
     {
         public int Id { get; set; }
         public int HallId { get; set; }
-        public int MovieId { get; set; } //Створити зв'язок?
         public int Row { get; set; }
         public int SeatNumber { get; set; }
         public string Type { get; set; } // "Standard", "VIP"
