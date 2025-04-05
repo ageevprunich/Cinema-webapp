@@ -20,18 +20,20 @@ namespace Cinema_webapp.Controllers
 
             return View(movie);
         }
+
+        [HttpGet]
+        public IActionResult Select(int id)
+        {
+            var movie = _db.Movies.FirstOrDefault(m => m.Id == id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            // Переходимо до сторінки сеансів цього фільму
+            return RedirectToAction("Index", "Showtime", new { movieId = id });
+        }
     }
 }
 
-//using Microsoft.AspNetCore.Mvc;
 
-//namespace Cinema_webapp.Controllers
-//{
-//    public class MovieController : Controller
-//    {
-//        public IActionResult Index()
-//        {
-//            return View();
-//        }
-//    }
-//}

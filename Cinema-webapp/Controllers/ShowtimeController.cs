@@ -14,12 +14,14 @@ namespace Cinema_webapp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(int movieId)
         {
-            List<Showtime> showtime  = _db.Showtimes.ToList();
+            var showtimes = _db.Showtimes
+                .Where(s => s.MovieId == movieId)
+                .ToList();
 
-            return View(showtime);
+            ViewBag.MovieId = movieId;
+            return View(showtimes); // View: Views/Showtime/Index.cshtml
         }
-        
     }
 }

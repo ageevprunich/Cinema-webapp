@@ -12,9 +12,24 @@
         margin: 0;
         padding: 0;
     }
+
+    .showtime-box {
+        max-width: 1000px;
+        margin: 50px auto;
+        background-color: #2c2c3a;
+        padding: 30px;
+        border-radius: 12px;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    }
 </style>
 
 @foreach (var showtime in Model)
 {
-   
+   <div class="showtime-box">
+       <p>Початок о @showtime.StartTime </p>
+       <p>Кінець о @showtime.EndTime </p>
+        <a asp-controller="Seat" asp-action="Select" asp-route-id="@showtime.Id" class="cta-button">🎟️ Місця</a>
+   </div>
 }
