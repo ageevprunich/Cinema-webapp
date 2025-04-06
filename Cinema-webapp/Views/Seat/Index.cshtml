@@ -1,7 +1,10 @@
-﻿@{
+﻿@model IEnumerable<Cinema_webapp.Models.Seat>
+@{
     ViewData["Title"] = "Оберіть місця";
-    int rows = 4;
-    int seatsPerRow = 10;
+    var bookedSeatIds = ViewBag.BookedSeatIds as List<int> ?? new List<int>();
+    var groupedSeats = Model.GroupBy(s => s.Row).OrderBy(g => g.Key);
+
+
 }
 
 <style>
@@ -77,21 +80,37 @@
     <h2 style="text-align: center; margin-bottom: 20px;">Оберіть місця</h2>
     <div class="cinema-screen">Екран</div>
     <div class="seating-chart">
-        @for (int row = 1; row <= rows; row++)
+        @foreach (var rowGroup in groupedSeats)
         {
             <div class="seat-row">
-                @for (int seat = 1; seat <= seatsPerRow; seat++)
+                @foreach (var seat in rowGroup.OrderBy(s => s.SeatNumber))
                 {
+                    var isBooked = bookedSeatIds.Contains(seat.Id);
+                    var classes = "seat" + (isBooked ? " occupied" : "");
+
                     <button type="button"
-                            class="seat"
-                            data-seat="@($"R{row}S{seat}")"
-                            title="Ряд @row, Місце @seat">
+                            class="@classes"
+                            data-seat-id="@seat.Id"
+                            title="Ряд @seat.Row, Місце @seat.SeatNumber (@seat.Type)">
+                        @seat.SeatNumber
                     </button>
                 }
             </div>
         }
     </div>
+            
+    <form id="seatForm" asp-controller="Ticket" asp-action="ConfirmBooking" method="post">
+        <input type="hidden" name="ShowtimeId" value="@ViewBag.ShowtimeId" />
+        <div id="selectedSeatsContainer"></div>
+
+        <button type="submit" class="btn btn-success" style="margin-top: 20px;">
+            ✅ Підтвердити бронювання
+        </button>
+    </form>
+        
+    
 </div>
+
 
 <script>
     document.querySelectorAll('.seat').forEach(seat => {
@@ -101,4 +120,26 @@
             }
         });
     });
+
+    // Коли надсилається форма
+    document.getElementById('seatForm').addEventListener('submit', function (e) {
+        const selectedSeats = document.querySelectorAll('.seat.selected');
+        const container = document.getElementById('selectedSeatsContainer');
+        container.innerHTML = ''; // Очищаємо перед додаванням
+
+        selectedSeats.forEach(seat => {
+            const seatId = seat.getAttribute('data-seat-id');
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'SeatIds';
+            input.value = seatId;
+            container.appendChild(input);
+        });
+
+        if (selectedSeats.length === 0) {
+            e.preventDefault();
+            alert("Будь ласка, виберіть хоча б одне місце!");
+        }
+    });
 </script>
+

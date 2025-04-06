@@ -31,6 +31,13 @@
        <p>Початок о @showtime.StartTime </p>
        <p>Кінець о @showtime.EndTime </p>
        <p>Зал # @showtime.HallId</p>
-        <a asp-controller="Seat" asp-action="Select" asp-route-id="@showtime.Id" class="cta-button">🎟️ Місця</a>
+        <a asp-action="Index"
+           asp-controller="Seat"
+           asp-route-showtimeId="@showtime.Id"
+           asp-route-hallId="@showtime.HallId"
+           class="cta-button">
+            🎟️ Місця
+        </a>
+
    </div>
 }

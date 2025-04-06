@@ -23,5 +23,22 @@ namespace Cinema_webapp.Controllers
             ViewBag.MovieId = movieId;
             return View(showtimes); // View: Views/Showtime/Index.cshtml
         }
+
+        [HttpGet]
+        public IActionResult Select(int id)
+        {
+            var showtime = _db.Showtimes.FirstOrDefault(s => s.Id == id);
+            if (showtime == null)
+            {
+                return NotFound();
+            }
+
+            //  Redirect з передачею showtimeId та hallId
+            return RedirectToAction("Index", "Seat", new
+            {
+                showtimeId = showtime.Id,
+                hallId = showtime.HallId
+            });
+        }
     }
 }

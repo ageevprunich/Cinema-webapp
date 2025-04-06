@@ -1,29 +1,5 @@
 ﻿@model IEnumerable<Cinema_webapp.Models.Movie>
 
-
-
-@* <h1>List of movies</h1> *@
-
-@* @foreach (var movie in Model) *@
-@* { *@
-@*     <div class="movie-block"> *@
-@*         <div class="movie-poster-block"> *@
-@*             <img class="movie-poster" *@
-@*                  src="@Url.Content(movie.PosterUrl)" *@
-@*                  alt="movie poster" /> *@
-@*         </div> *@
-@*         <div class="movie-info"> *@
-@*             <p><span class="movie-name">@movie.Title</span></p> *@
-@*             <p class="movie-genre">@movie.Genre</p> *@
-@*             <p class="movie-rating">Rating: @movie.Rating</p> *@
-@*             <button class="showtime-button" type="button"> *@
-@*                 Showtime *@
-@*             </button> *@
-@*         </div> *@
-@*     </div> *@
-@* } *@
-
-
 @{
     ViewData["Title"] = "Movies";
 }
@@ -114,8 +90,6 @@
 
         <div class="movie-meta">
             <p><strong>Жанр:</strong> @movie.Genre</p>
-            <p><strong>Режисер:</strong> Крістофер Нолан</p>
-            <p><strong>У ролях:</strong> Кілліан Мерфі, Емілі Блант, Метт Деймон, Роберт Дауні-молодший</p>
             <p><strong>Тривалість:</strong> @movie.DurationMinutes</p>
             <p><strong>Прем'єра:</strong> @movie.ReleaseDate</p>
             <p><strong>Рейтинг IMDb:</strong> @movie.Rating</p>
@@ -125,28 +99,3 @@
         <a asp-action="Select" asp-controller="Movie" asp-route-id="@movie.Id" class="btn btn-primary">🎟️ Сеанси</a>
     </div>
 }
-
-
-@* Фільм Крістофера Нолана про життя Дж. Роберта Оппенгеймера — фізика, який керував створенням першої атомної бомби *@
-
-@* <div class="movie-detail"> *@
-@*     <div class="movie-header"> *@
-@*         <img src="https://upload.wikimedia.org/wikipedia/en/7/79/Oppenheimer_%282023%29.jpg" alt="Oppenheimer poster" /> *@
-@*         <div class="movie-info"> *@
-@*             <h1>Oppenheimer</h1> *@
-@*             <p>Фільм Крістофера Нолана про життя Дж. Роберта Оппенгеймера — фізика, який керував створенням першої атомної бомби.</p> *@
-@*         </div> *@
-@*     </div> *@
-
-@*     <div class="movie-meta"> *@
-@*         <p><strong>Жанр:</strong> Історична драма, біографія, трилер</p> *@
-@*         <p><strong>Режисер:</strong> Крістофер Нолан</p> *@
-@*         <p><strong>У ролях:</strong> Кілліан Мерфі, Емілі Блант, Метт Деймон, Роберт Дауні-молодший</p> *@
-@*         <p><strong>Тривалість:</strong> 180 хв</p> *@
-@*         <p><strong>Прем'єра:</strong> 26 липня 2023</p> *@
-@*         <p><strong>Рейтинг IMDb:</strong> 8.6/10</p> *@
-@*     </div> *@
-
-@*     <a href="/Showtime" class="cta-button">🎟️ Купити квиток</a> *@
-@* </div> *@
-

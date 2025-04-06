@@ -7,13 +7,8 @@ namespace Cinema_webapp
     {
         public static void Seed(ApplicationDbContext context)
         {
-            // Очистити залежності (в правильному порядку)
-            context.Showtimes.RemoveRange(context.Showtimes);
-            context.Seats.RemoveRange(context.Seats);
-            context.Halls.RemoveRange(context.Halls);
-            context.Movies.RemoveRange(context.Movies);
-
-            context.SaveChanges();
+            //context.Seats.RemoveRange(context.Seats);
+            //context.SaveChanges();
 
             if (!context.Movies.Any())
             {
@@ -33,7 +28,7 @@ namespace Cinema_webapp
                 var halls = Enumerable.Range(1, 4).Select(i => new Hall
                 {
                     Name = $"Зал {i}",
-                    Rows = 5,
+                    Rows = 4,
                     SeatsQuantity = 40
                 }).ToList();
 
@@ -53,7 +48,7 @@ namespace Cinema_webapp
                         var seat = new Seat
                         {
                             HallId = hall.Id,
-                            Row = ((i - 1) / 8) + 1, // Для логіки залу все ще можна залишити ряд
+                            Row = ((i - 1) / 10) + 1, 
                             SeatNumber = i,         // Послідовна нумерація: 1..40
                             Type = i > 32 ? "VIP" : "Standard" // Останній ряд (місця 33-40) — VIP
                         };
