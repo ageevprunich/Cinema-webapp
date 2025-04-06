@@ -7,7 +7,7 @@ namespace Cinema_webapp
     {
         public static void Seed(ApplicationDbContext context)
         {
-            // Очистити залежності (в правильному порядку)
+            //Очистити залежності(в правильному порядку)
             //context.Showtimes.RemoveRange(context.Showtimes);
             //context.Seats.RemoveRange(context.Seats);
             //context.Halls.RemoveRange(context.Halls);
@@ -53,7 +53,7 @@ namespace Cinema_webapp
                         var seat = new Seat
                         {
                             HallId = hall.Id,
-                            Row = ((i - 1) / 10) + 1, 
+                            Row = ((i - 1) / 10) + 1,
                             SeatNumber = i,         // Послідовна нумерація: 1..40
                             Type = i > 30 ? "VIP" : "Standard" // Останній ряд (місця 33-40) — VIP
                         };
