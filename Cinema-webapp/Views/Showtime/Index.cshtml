@@ -1,43 +1,48 @@
 ﻿@model IEnumerable<Cinema_webapp.Models.Showtime>
 
 @{
-    ViewData["Title"] = "Showtimes";
+    ViewData["Title"] = "Сеанси";
 }
 
 <style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(to right, #1e1e2f, #3a3a5a);
-        color: #ffffff;
-        margin: 0;
-        padding: 0;
+    .showtime-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+        padding: 40px 20px;
     }
 
-    .showtime-box {
-        max-width: 1000px;
-        margin: 50px auto;
+    .showtime-card {
         background-color: #2c2c3a;
-        padding: 30px;
-        border-radius: 12px;
+        flex: 1 1 250px;
+        max-width: 320px;
+        min-width: 230px;
+        padding: 20px;
+        border-radius: 15px;
         color: #fff;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        box-shadow: 0 0 15px rgba(0,0,0,0.4);
+        box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+        .showtime-card p {
+            margin-bottom: 10px;
+        }
+
+    .btn-seat {
+        margin-top: 10px;
     }
 </style>
 
-@foreach (var showtime in Model)
-{
-   <div class="showtime-box">
-       <p>Початок о @showtime.StartTime </p>
-       <p>Кінець о @showtime.EndTime </p>
-       <p>Зал # @showtime.HallId</p>
-        <a asp-action="Index"
-           asp-controller="Seat"
-           asp-route-showtimeId="@showtime.Id"
-           asp-route-hallId="@showtime.HallId"
-           class="cta-button">
-            🎟️ Місця
-        </a>
-
-   </div>
-}
+<div class="showtime-grid">
+    @foreach (var showtime in Model)
+    {
+        <div class="showtime-card">
+            <p><strong>Початок:</strong> @showtime.StartTime</p>
+            <p><strong>Кінець:</strong> @showtime.EndTime</p>
+            <p><strong>Зал #</strong> @showtime.HallId</p>
+            <a class="btn btn-danger btn-seat" href="@Url.Action("Select", "Showtime", new { id = showtime.Id })">
+                🎟 Місця
+            </a>
+        </div>
+    }
+</div>
