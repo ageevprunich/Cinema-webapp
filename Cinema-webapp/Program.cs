@@ -1,3 +1,4 @@
+using Cinema_webapp;
 using Cinema_webapp.Data;
 using Cinema_webapp.Models;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +27,12 @@ builder.Services.AddDefaultIdentity<User>(options =>
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    ApplicationDbSeeder.Seed(db);
+}
 
 //using (var scope = app.Services.CreateScope())
 //{

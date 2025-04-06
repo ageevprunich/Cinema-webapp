@@ -9,7 +9,7 @@ namespace Cinema_webapp.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int MovieId { get; set; }
-        //public int HallId { get; set; } //Створити зв'язок?
+        public int HallId { get; set; } //Створити зв'язок?
 
         public IEnumerable<Ticket> Tickets { get; set; }
         public Movie Movie { get; set; }
