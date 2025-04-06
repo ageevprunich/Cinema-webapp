@@ -79,6 +79,7 @@
 <div class="showtime-box">
     <h2 style="text-align: center; margin-bottom: 20px;">Оберіть місця</h2>
     <div class="cinema-screen">Екран</div>
+
     <div class="seating-chart">
         @foreach (var rowGroup in groupedSeats)
         {
@@ -104,7 +105,7 @@
     <div style="text-align: center; margin-top: 20px;">
         <h4>Сума до оплати: <span id="totalPrice">0</span> грн</h4>
     </div>
-            
+
     <form id="seatForm" asp-controller="Ticket" asp-action="ConfirmBooking" method="post">
         <input type="hidden" name="ShowtimeId" value="@ViewBag.ShowtimeId" />
         <div id="selectedSeatsContainer"></div>
@@ -113,9 +114,8 @@
             ✅ Підтвердити бронювання
         </button>
     </form>
-        
-    
 </div>
+
 
 
 <script>
@@ -133,7 +133,6 @@
         document.getElementById('totalPrice').textContent = total;
     }
 
-    // Клік по місцях
     document.querySelectorAll('.seat').forEach(seat => {
         seat.addEventListener('click', () => {
             if (!seat.classList.contains('occupied')) {
@@ -143,7 +142,6 @@
         });
     });
 
-    // Підтвердження вибору
     document.getElementById('seatForm').addEventListener('submit', function (e) {
         const selectedSeats = document.querySelectorAll('.seat.selected');
         const container = document.getElementById('selectedSeatsContainer');
@@ -151,11 +149,19 @@
 
         selectedSeats.forEach(seat => {
             const seatId = seat.getAttribute('data-seat-id');
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'SeatIds';
-            input.value = seatId;
-            container.appendChild(input);
+            const price = seat.getAttribute('data-price');
+
+            const inputSeatId = document.createElement('input');
+            inputSeatId.type = 'hidden';
+            inputSeatId.name = 'SeatIds';
+            inputSeatId.value = seatId;
+            container.appendChild(inputSeatId);
+
+            const inputPrice = document.createElement('input');
+            inputPrice.type = 'hidden';
+            inputPrice.name = 'Prices';
+            inputPrice.value = price;
+            container.appendChild(inputPrice);
         });
 
         if (selectedSeats.length === 0) {
@@ -164,5 +170,6 @@
         }
     });
 </script>
+
 
 

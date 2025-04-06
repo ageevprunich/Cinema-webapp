@@ -1,0 +1,52 @@
+﻿@model List<Cinema_webapp.Models.Ticket>
+
+@{
+    ViewData["Title"] = "Бронювання підтверджено";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #1e1e2f, #3a3a5a);
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="alert alert-success text-center">
+        <h3>✅ Ваше бронювання підтверджено!</h3>
+        <p>Дякуємо за покупку. Нижче — деталі замовлення:</p>
+    </div>
+
+    <table class="table table-bordered table-striped mt-4">
+        <thead>
+            <tr class="border-white">
+                <th class="text-white">Фільм</th>
+                <th class="text-white">Сеанс</th>
+                <th class="text-white">Зал</th>
+                <th class="text-white">Ряд</th>
+                <th class="text-white">Місце</th>
+                <th class="text-white">Ціна</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in Model)
+            {
+                <tr class="border-white">
+                    <td class="text-white">@ticket.Showtime.Movie.Title</td>
+                    <td class="text-white">@ticket.Showtime.StartTime.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td class="text-white">Зал #@ticket.Showtime.HallId</td>
+                    <td class="text-white">@ticket.Seat.Row</td>
+                    <td class="text-white">@ticket.Seat.SeatNumber</td>
+                    <td class="text-white">@ticket.Price грн</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <a href="/" class="btn btn-warning">⬅️ На головну</a>
+    </div>
+</div>

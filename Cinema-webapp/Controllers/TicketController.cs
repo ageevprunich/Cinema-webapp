@@ -1,6 +1,7 @@
 ﻿using Cinema_webapp.Data;
 using Cinema_webapp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cinema_webapp.Controllers
 {
@@ -19,28 +20,52 @@ namespace Cinema_webapp.Controllers
         }
 
         [HttpPost]
-        public IActionResult ConfirmBooking(int showtimeId, List<int> seatIds)
+        public IActionResult ConfirmBooking(int showtimeId, List<int> seatIds, List<decimal> prices)
         {
+            if (seatIds.Count != prices.Count)
+            {
+                return BadRequest("Невідповідність кількості місць і цін.");
+            }
+
             var alreadyBooked = _db.Tickets
                 .Where(t => t.ShowtimeId == showtimeId && seatIds.Contains(t.SeatId))
                 .Select(t => t.SeatId)
                 .ToList();
 
-            var newTickets = seatIds
-                .Where(id => !alreadyBooked.Contains(id))
-                .Select(id => new Ticket
+            var newTickets = new List<Ticket>();
+
+            for (int i = 0; i < seatIds.Count; i++)
+            {
+                var seatId = seatIds[i];
+                var price = prices[i];
+
+                if (!alreadyBooked.Contains(seatId))
                 {
-                    ShowtimeId = showtimeId,
-                    SeatId = id,
-                    Status = "Reserved" 
-                }).ToList();
+                    newTickets.Add(new Ticket
+                    {
+                        ShowtimeId = showtimeId,
+                        SeatId = seatId,
+                        Price = price,
+                        Status = "Reserved"
+                    });
+                }
+            }
 
             _db.Tickets.AddRange(newTickets);
             _db.SaveChanges();
+            
+            var ticketIds = newTickets.Select(t => t.Id).ToList();
 
-            return RedirectToAction("Index", "Ticket");
+            var fullTickets = _db.Tickets
+                .Where(t => ticketIds.Contains(t.Id))
+                .Include(t => t.Seat)
+                .Include(t => t.Showtime)
+                    .ThenInclude(s => s.Movie)
+                .ToList();
 
+            return View("BookingConfirmation", fullTickets);
         }
+
 
     }
 }
