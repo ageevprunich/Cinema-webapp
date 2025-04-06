@@ -10,6 +10,6 @@
         public string PosterUrl { get; set; }
         public DateTime ReleaseDate { get; set; }
         public float Rating { get; set; }
-        public IEnumerable<Showtime> Showtimes { get; set; }
+        public IEnumerable<Showtime>? Showtimes { get; set; }
     }
 }
