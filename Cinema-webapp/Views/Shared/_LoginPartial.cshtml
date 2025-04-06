@@ -1,6 +1,41 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<style>
+    .navbar-nav {
+        align-items: center;
+        gap: 10px;
+    }
+
+    .navbar-nav .nav-link {
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .navbar-nav .nav-link:hover {
+        color: #0d6efd; /* Bootstrap primary */
+        text-decoration: underline;
+    }
+
+    .navbar-nav .btn-link {
+        padding: 0;
+        border: none;
+        background: none;
+        font-weight: 500;
+        color: #212529;
+        cursor: pointer;
+    }
+
+    .navbar-nav .btn-link:hover {
+        color: #dc3545; /* red (logout) */
+        text-decoration: underline;
+    }
+
+    .navbar-nav form {
+        display: inline;
+    }
+</style>
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
