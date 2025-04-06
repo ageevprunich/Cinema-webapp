@@ -55,7 +55,7 @@ namespace Cinema_webapp
                             HallId = hall.Id,
                             Row = ((i - 1) / 10) + 1, 
                             SeatNumber = i,         // Послідовна нумерація: 1..40
-                            Type = i > 32 ? "VIP" : "Standard" // Останній ряд (місця 33-40) — VIP
+                            Type = i > 30 ? "VIP" : "Standard" // Останній ряд (місця 33-40) — VIP
                         };
                         seats.Add(seat);
                     }

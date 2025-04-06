@@ -3,8 +3,8 @@
     ViewData["Title"] = "Оберіть місця";
     var bookedSeatIds = ViewBag.BookedSeatIds as List<int> ?? new List<int>();
     var groupedSeats = Model.GroupBy(s => s.Row).OrderBy(g => g.Key);
-
-
+    int standardPrice = 100;
+    int vipPrice = 150;
 }
 
 <style>
@@ -87,16 +87,22 @@
                 {
                     var isBooked = bookedSeatIds.Contains(seat.Id);
                     var classes = "seat" + (isBooked ? " occupied" : "");
+                    var price = seat.Type == "VIP" ? vipPrice : standardPrice;
 
                     <button type="button"
                             class="@classes"
                             data-seat-id="@seat.Id"
-                            title="Ряд @seat.Row, Місце @seat.SeatNumber (@seat.Type)">
+                            data-price="@price"
+                            title="Ряд @seat.Row, Місце @seat.SeatNumber (@seat.Type, @price грн)">
                         @seat.SeatNumber
                     </button>
                 }
             </div>
         }
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <h4>Сума до оплати: <span id="totalPrice">0</span> грн</h4>
     </div>
             
     <form id="seatForm" asp-controller="Ticket" asp-action="ConfirmBooking" method="post">
@@ -113,19 +119,35 @@
 
 
 <script>
+    function updateTotalPrice() {
+        const selectedSeats = document.querySelectorAll('.seat.selected');
+        let total = 0;
+
+        selectedSeats.forEach(seat => {
+            const price = parseFloat(seat.getAttribute('data-price'));
+            if (!isNaN(price)) {
+                total += price;
+            }
+        });
+
+        document.getElementById('totalPrice').textContent = total;
+    }
+
+    // Клік по місцях
     document.querySelectorAll('.seat').forEach(seat => {
         seat.addEventListener('click', () => {
             if (!seat.classList.contains('occupied')) {
                 seat.classList.toggle('selected');
+                updateTotalPrice();
             }
         });
     });
 
-    // Коли надсилається форма
+    // Підтвердження вибору
     document.getElementById('seatForm').addEventListener('submit', function (e) {
         const selectedSeats = document.querySelectorAll('.seat.selected');
         const container = document.getElementById('selectedSeatsContainer');
-        container.innerHTML = ''; // Очищаємо перед додаванням
+        container.innerHTML = '';
 
         selectedSeats.forEach(seat => {
             const seatId = seat.getAttribute('data-seat-id');
@@ -142,4 +164,5 @@
         }
     });
 </script>
+
 
