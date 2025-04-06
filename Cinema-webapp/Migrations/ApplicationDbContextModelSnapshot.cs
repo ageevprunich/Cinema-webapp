@@ -160,8 +160,6 @@ namespace Cinema_webapp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HallId");
-
                     b.HasIndex("MovieId");
 
                     b.ToTable("Showtimes");
@@ -190,6 +188,9 @@ namespace Cinema_webapp.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -347,12 +348,10 @@ namespace Cinema_webapp.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -389,12 +388,10 @@ namespace Cinema_webapp.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -417,12 +414,6 @@ namespace Cinema_webapp.Migrations
 
             modelBuilder.Entity("Cinema_webapp.Models.Showtime", b =>
                 {
-                    b.HasOne("Cinema_webapp.Models.Hall", null)
-                        .WithMany("Showtimes")
-                        .HasForeignKey("HallId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Cinema_webapp.Models.Movie", "Movie")
                         .WithMany("Showtimes")
                         .HasForeignKey("MovieId")
@@ -511,8 +502,6 @@ namespace Cinema_webapp.Migrations
             modelBuilder.Entity("Cinema_webapp.Models.Hall", b =>
                 {
                     b.Navigation("Seats");
-
-                    b.Navigation("Showtimes");
                 });
 
             modelBuilder.Entity("Cinema_webapp.Models.Movie", b =>
