@@ -8,12 +8,12 @@ namespace Cinema_webapp
         public static void Seed(ApplicationDbContext context)
         {
             // Очистити залежності (в правильному порядку)
-            context.Showtimes.RemoveRange(context.Showtimes);
-            context.Seats.RemoveRange(context.Seats);
-            context.Halls.RemoveRange(context.Halls);
-            context.Movies.RemoveRange(context.Movies);
+            //context.Showtimes.RemoveRange(context.Showtimes);
+            //context.Seats.RemoveRange(context.Seats);
+            //context.Halls.RemoveRange(context.Halls);
+            //context.Movies.RemoveRange(context.Movies);
 
-            context.SaveChanges();
+            //context.SaveChanges();
 
             if (!context.Movies.Any())
             {
