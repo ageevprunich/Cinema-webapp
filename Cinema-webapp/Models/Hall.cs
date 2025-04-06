@@ -8,7 +8,7 @@
         public int SeatsQuantity { get; set; }
 
         public IEnumerable<Seat> Seats { get; set; }
-        public IEnumerable<Showtime> Showtimes { get; set; } // Створити зв'язок?
+        //public IEnumerable<Showtime> Showtimes { get; set; } // Створити зв'язок?
 
     }
 }
