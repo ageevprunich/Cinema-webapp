@@ -24,6 +24,8 @@
     <thead>
         <tr>
             <th>Фільм</th>
+            <th>Дата</th>
+            <th>Зал</th>
             <th>Місце</th>
             <th>Ціна, грн</th>
         </tr>
@@ -32,8 +34,10 @@
         @foreach (var ticket in Model.Tickets)
         {
             <tr>
-                <td>@ticket.Showtime?.Movie?.Title</td>
-                <td>Ряд @ticket.Seat?.Row, Місце @ticket.Seat?.SeatNumber</td>
+                <td>@ticket.Showtime.Movie.Title</td>
+                <td>@ticket.Showtime.StartTime.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>Зал #@ticket.Showtime.HallId</td>
+                <td>Ряд @ticket.Seat.Row, Місце @ticket.Seat.SeatNumber</td>
                 <td>@string.Format("{0:0.00}", ticket.Price)</td>
             </tr>
         }

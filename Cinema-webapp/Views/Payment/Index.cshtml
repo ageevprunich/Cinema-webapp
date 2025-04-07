@@ -6,42 +6,41 @@
 
 <h2>Оплата квитків</h2>
 
-<!-- Список вибраних квитків -->
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Місце</th>
-            <th>Ціна, грн</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var ticket in Model.Tickets)
-        {
-            <tr>
-                @if (ticket.Seat != null)
-                {
-                    <td>Ряд @ticket.Seat.Row, Місце @ticket.Seat.SeatNumber</td>
-                }
-                else
-                {
-                    <td>Місце @ticket.SeatId</td>
-                }
-                <td>@string.Format("{0:0.00}", ticket.Price)</td>
-            </tr>
-        }
-    </tbody>
-    <tfoot>
-        <tr>
-            <td><strong>Загалом:</strong></td>
-            <td><strong>@string.Format("{0:0.00}", Model.TotalAmount)</strong></td>
-        </tr>
-    </tfoot>
-</table>
-
-<!-- Форма вибору способу оплати -->
 <form asp-action="Confirm" method="post">
     @Html.AntiForgeryToken()
 
+    <!-- Таблиця з квитками -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Фільм</th>
+                <th>Дата</th>
+                <th>Зал</th>
+                <th>Місце</th>
+                <th>Ціна, грн</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in Model.Tickets)
+            {
+                <tr>
+                    <td>@ticket.Showtime.Movie.Title</td>
+                    <td>@ticket.Showtime.StartTime.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>Зал #@ticket.Showtime.HallId</td>
+                    <td>Ряд @ticket.Seat.Row, Місце @ticket.Seat.SeatNumber</td>
+                    <td>@string.Format("{0:0.00}", ticket.Price)</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4"><strong>Загалом:</strong></td>
+                <td><strong>@string.Format("{0:0.00}", Model.TotalAmount)</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- Спосіб оплати -->
     <div class="form-group">
         <label asp-for="PaymentMethod"></label>
         <select asp-for="PaymentMethod" class="form-control">
@@ -52,14 +51,14 @@
         <span asp-validation-for="PaymentMethod" class="text-danger"></span>
     </div>
 
-    <!-- Приховані поля для передачі списку квитків, що оплачуються -->
+    <!-- Приховані поля для передачі ID квитків -->
     @foreach (var ticketId in Model.TicketIds)
     {
         <input type="hidden" name="TicketIds" value="@ticketId" />
     }
 
-    <button type="submit" class="btn btn-primary">Підтвердити оплату</button>
+    <button type="submit" class="btn btn-primary mt-3">Підтвердити оплату</button>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
 </form>
 
-<!-- Відображення валідаційних підсумків, якщо є помилки -->
-<div asp-validation-summary="All" class="text-danger"></div>

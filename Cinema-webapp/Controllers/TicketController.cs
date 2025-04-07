@@ -1,7 +1,9 @@
 ﻿using Cinema_webapp.Data;
 using Cinema_webapp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Cinema_webapp.Controllers
 {
@@ -20,6 +22,7 @@ namespace Cinema_webapp.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult ConfirmBooking(int showtimeId, List<int> seatIds, List<decimal> prices)
         {
             if (seatIds.Count != prices.Count)
@@ -34,6 +37,8 @@ namespace Cinema_webapp.Controllers
 
             var newTickets = new List<Ticket>();
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             for (int i = 0; i < seatIds.Count; i++)
             {
                 var seatId = seatIds[i];
@@ -46,7 +51,8 @@ namespace Cinema_webapp.Controllers
                         ShowtimeId = showtimeId,
                         SeatId = seatId,
                         Price = price,
-                        Status = "Reserved"
+                        Status = "Reserved",
+                        UserId = userId
                     });
                 }
             }

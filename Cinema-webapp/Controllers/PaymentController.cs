@@ -6,11 +6,12 @@ using System.Collections.Generic;
 using Cinema_webapp.Models;        
 using Cinema_webapp.Models.ViewModels;
 using Cinema_webapp.Data;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 public class PaymentController : Controller
 {
-    private readonly ApplicationDbContext _context;  // або інший контекст даних
-
+    private readonly ApplicationDbContext _context; 
     public PaymentController(ApplicationDbContext context)
     {
         _context = context;
@@ -22,32 +23,34 @@ public class PaymentController : Controller
     {
         if (ticketIds == null || ticketIds.Length == 0)
         {
-            // Якщо список квитків не передано – можна повернути помилку або редирект на список сеансів
             return BadRequest("No tickets selected for payment.");
         }
 
-        // Завантажуємо вибрані квитки з бази даних
         List<Ticket> tickets = _context.Tickets
-            .Include(t => t.Seat) // <--- обов'язково
+            .Include(t => t.Seat)
+            .Include(t => t.Showtime)
+                .ThenInclude(s => s.Movie)
             .Where(t => ticketIds.Contains(t.Id))
             .ToList();
 
+        if (tickets.Any(t => t.Status == "Paid"))
+        {
+            return BadRequest("Ці квитки вже були оплачені.");
+        }
 
         if (tickets.Count == 0)
         {
             return NotFound("Tickets not found.");
         }
 
-        // Обчислюємо загальну суму
         decimal totalAmount = tickets.Sum(t => t.Price);
 
-        // Формуємо модель представлення для відображення на сторінці
         var viewModel = new PaymentIndexViewModel
         {
             TicketIds = tickets.Select(t => t.Id).ToList(),
             Tickets = tickets,
             TotalAmount = totalAmount,
-            PaymentMethod = null  // Користувач вибере на формі
+            PaymentMethod = null  
         };
 
         return View(viewModel);
@@ -58,12 +61,10 @@ public class PaymentController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Confirm(PaymentIndexViewModel model)
     {
-        // 🛠️ Ігноруємо валідацію для поля Tickets (воно не надсилається з форми)
         ModelState.Remove(nameof(model.Tickets));
 
         if (!ModelState.IsValid)
         {
-            // Повертаємо квитки для відображення у Razor
             if (model.TicketIds != null && model.TicketIds.Count > 0)
             {
                 model.Tickets = _context.Tickets
@@ -77,14 +78,13 @@ public class PaymentController : Controller
             return View("Index", model);
         }
 
-        // Перевірка наявності ID квитків
         if (model.TicketIds == null || model.TicketIds.Count == 0)
         {
             return BadRequest("Квитки не передані.");
         }
 
-        // Завантажуємо квитки
         var ticketsToPay = _context.Tickets
+            .Include(t => t.Seat)
             .Where(t => model.TicketIds.Contains(t.Id))
             .ToList();
 
@@ -93,7 +93,14 @@ public class PaymentController : Controller
             return NotFound("Квитки не знайдено.");
         }
 
-        // Створення платежу
+        if (ticketsToPay.Any(t => t.Status == "Paid"))
+        {
+            ModelState.AddModelError("", "Деякі з вибраних квитків уже оплачені.");
+            model.Tickets = ticketsToPay;
+            model.TotalAmount = ticketsToPay.Sum(t => t.Price);
+            return View("Index", model);
+        }
+
         var payment = new Payment
         {
             PaymentDate = DateTime.Now,
@@ -105,7 +112,6 @@ public class PaymentController : Controller
         _context.Payments.Add(payment);
         _context.SaveChanges();
 
-        // Прив'язуємо квитки до платежу
         foreach (var ticket in ticketsToPay)
         {
             ticket.Status = "Paid";
@@ -117,14 +123,10 @@ public class PaymentController : Controller
         return RedirectToAction("Confirmation", new { id = payment.Id });
     }
 
-
-
-
     // GET: Payment/Confirmation/{id}
     [HttpGet]
     public IActionResult Confirmation(int id)
     {
-        // Завантажуємо платіж, його квитки і їхні місця
         var payment = _context.Payments
             .Include(p => p.Tickets)
                 .ThenInclude(t => t.Seat)
@@ -132,7 +134,6 @@ public class PaymentController : Controller
                 .ThenInclude(t => t.Showtime)
                     .ThenInclude(s => s.Movie)
             .FirstOrDefault(p => p.Id == id);
-
 
 
         if (payment == null)

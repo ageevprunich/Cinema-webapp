@@ -13,6 +13,10 @@
         public decimal Price { get; set; }
         public string Status { get; set; }
 
+        public string? UserId { get; set; }
+        public ApplicationUser? User { get; set; } 
+
+
         //public int UserId { get; set; }
         public int? PaymentId { get; set; }
         public Payment Payment { get; set; }

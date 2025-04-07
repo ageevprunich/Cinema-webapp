@@ -1,0 +1,52 @@
+﻿@model List<Cinema_webapp.Models.Ticket>
+@{
+    ViewData["Title"] = "Мої квитки";
+}
+
+<h2>Мої квитки</h2>
+
+<form asp-controller="Payment" asp-action="Index" method="get">
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Фільм</th>
+                <th>Дата</th>
+                <th>Зал</th>
+                <th>Місце</th>
+                <th>Ціна</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in Model)
+            {
+                <tr>
+                    <td>
+                        @if (ticket.Status == "Reserved")
+                        {
+                            <input type="checkbox" name="ticketIds" value="@ticket.Id" />
+                        }
+                    </td>
+                    <td>@ticket.Showtime.Movie.Title</td>
+                    <td>@ticket.Showtime.StartTime.ToString("g")</td>
+                    <td>Зал #@ticket.Showtime.HallId</td>
+                    <td>Ряд @ticket.Seat.Row, Місце @ticket.Seat.SeatNumber</td>
+                    <td>@ticket.Price грн</td>
+                    <td>
+                        @if (ticket.Status == "Paid")
+                        {
+                            <span class="text-success">Оплачено</span>
+                        }
+                        else
+                        {
+                            <span class="text-warning">Заброньовано</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-success">Оплатити вибрані</button>
+</form>
