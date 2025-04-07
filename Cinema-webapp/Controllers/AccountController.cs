@@ -26,4 +26,23 @@ public class AccountController : Controller
 
         return View(tickets);
     }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Refund(int ticketId)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var ticket = _context.Tickets.FirstOrDefault(t => t.Id == ticketId && t.UserId == userId);
+
+        if (ticket == null || ticket.Status != "Paid")
+        {
+            return NotFound(); // або View("Error")
+        }
+
+        ticket.Status = "Refunded"; // або "Canceled"
+        _context.SaveChanges();
+
+        TempData["Message"] = "Квиток успішно повернено.";
+        return RedirectToAction("MyTickets");
+    }
 }
