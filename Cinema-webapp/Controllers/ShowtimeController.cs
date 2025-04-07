@@ -1,6 +1,7 @@
 ﻿using Cinema_webapp.Data;
 using Cinema_webapp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cinema_webapp.Controllers
 {
@@ -39,6 +40,49 @@ namespace Cinema_webapp.Controllers
                 showtimeId = showtime.Id,
                 hallId = showtime.HallId
             });
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            ViewBag.Movies = new SelectList(_db.Movies, "Id", "Title");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Showtime showtime)
+        {
+            // Лог значень полів
+            Console.WriteLine("POST Create method reached");
+            Console.WriteLine($"StartTime: {showtime.StartTime}");
+            Console.WriteLine($"EndTime: {showtime.EndTime}");
+            Console.WriteLine($"MovieId: {showtime.MovieId}");
+            Console.WriteLine($"HallId: {showtime.HallId}");
+
+            // Перевірка валідації
+            if (!ModelState.IsValid)
+            {
+                Console.WriteLine("❌ ModelState is NOT valid!");
+                foreach (var key in ModelState.Keys)
+                {
+                    var state = ModelState[key];
+                    foreach (var error in state.Errors)
+                    {
+                        Console.WriteLine($"⚠️ Field: {key}, Error: {error.ErrorMessage}");
+                    }
+                }
+
+                ViewBag.Movies = new SelectList(_db.Movies, "Id", "Title", showtime.MovieId);
+                return View(showtime);
+            }
+
+            // Якщо все валідно — додаємо в БД
+            _db.Showtimes.Add(showtime);
+            await _db.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Showtime created!";
+            return RedirectToAction("Index", "Movie");
         }
     }
 }

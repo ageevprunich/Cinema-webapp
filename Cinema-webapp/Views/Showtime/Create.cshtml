@@ -1,0 +1,106 @@
+﻿@model Cinema_webapp.Models.Showtime
+@{
+    ViewData["Title"] = "Create Showtime";
+}
+
+<style>
+    body {
+        background: linear-gradient(to right, #1e1e2f, #3a3a5a);
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        color: #ffcc00;
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    form {
+        background-color: #2c2c3a;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        margin: 30px auto 50px auto;
+        max-width: 700px;
+    }
+
+    .form-label {
+        color: #ddd;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        background-color: #3d3d4d;
+        color: #fff;
+        border: 1px solid #555;
+        transition: 0.3s ease;
+    }
+
+        .form-control:focus {
+            background-color: #444;
+            border-color: #ffcc00;
+            box-shadow: 0 0 5px #ffcc00;
+            color: #fff;
+        }
+
+    select.form-control {
+        appearance: none;
+    }
+
+    .btn-warning {
+        background-color: #ffcc00;
+        color: #1e1e2f;
+        font-weight: bold;
+        border: none;
+        padding: 12px;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-warning:hover {
+            background-color: #e6b800;
+        }
+
+    .text-danger {
+        color: #ff4d4d !important;
+        font-size: 0.9rem;
+    }
+</style>
+
+<h2 class="text-center text-light mt-4 mb-3">Create Showtime</h2>
+
+<form asp-action="Create" method="post" class="bg-dark text-white p-4 rounded shadow-lg" style="max-width: 700px; margin: auto;">
+    <div class="form-group mb-3">
+        <label asp-for="StartTime" class="form-label">Start Time</label>
+        <input asp-for="StartTime" class="form-control" type="datetime-local" />
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="EndTime" class="form-label">End Time</label>
+        <input asp-for="EndTime" class="form-control" type="datetime-local" />
+        <span asp-validation-for="EndTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="MovieId" class="form-label">Movie</label>
+        <select asp-for="MovieId" class="form-control" asp-items="ViewBag.Movies">
+            <option value="">-- Select Movie --</option>
+        </select>
+        <span asp-validation-for="MovieId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-4">
+        <label asp-for="HallId" class="form-label">Hall ID</label>
+        <input asp-for="HallId" class="form-control" type="number" />
+        <span asp-validation-for="HallId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-warning w-100">Create Showtime</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
