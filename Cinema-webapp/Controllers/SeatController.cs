@@ -21,7 +21,7 @@ namespace Cinema_webapp.Controllers
                 .ToList();
 
             var bookedSeats = _db.Tickets
-                .Where(t => t.ShowtimeId == showtimeId)
+                .Where(t => t.ShowtimeId == showtimeId && (t.Status == "Paid" || t.Status == "Reserved"))
                 .Select(t => t.SeatId)
                 .ToList();
 

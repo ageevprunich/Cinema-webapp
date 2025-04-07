@@ -59,7 +59,7 @@ namespace Cinema_webapp.Controllers
 
             _db.Tickets.AddRange(newTickets);
             _db.SaveChanges();
-            
+
             var ticketIds = newTickets.Select(t => t.Id).ToList();
 
             var fullTickets = _db.Tickets
