@@ -1,5 +1,65 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Cinema_webapp.Models.ViewModels.PaymentIndexViewModel
+
 @{
+    ViewData["Title"] = "Оплата квитків";
 }
+
+<h2>Оплата квитків</h2>
+
+<!-- Список вибраних квитків -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Місце</th>
+            <th>Ціна, грн</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ticket in Model.Tickets)
+        {
+            <tr>
+                @if (ticket.Seat != null)
+                {
+                    <td>Ряд @ticket.Seat.Row, Місце @ticket.Seat.SeatNumber</td>
+                }
+                else
+                {
+                    <td>Місце @ticket.SeatId</td>
+                }
+                <td>@string.Format("{0:0.00}", ticket.Price)</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td><strong>Загалом:</strong></td>
+            <td><strong>@string.Format("{0:0.00}", Model.TotalAmount)</strong></td>
+        </tr>
+    </tfoot>
+</table>
+
+<!-- Форма вибору способу оплати -->
+<form asp-action="Confirm" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="PaymentMethod"></label>
+        <select asp-for="PaymentMethod" class="form-control">
+            <option value="">-- Оберіть спосіб оплати --</option>
+            <option value="Credit Card">Кредитна картка</option>
+            <option value="Cash">Готівка</option>
+        </select>
+        <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+    </div>
+
+    <!-- Приховані поля для передачі списку квитків, що оплачуються -->
+    @foreach (var ticketId in Model.TicketIds)
+    {
+        <input type="hidden" name="TicketIds" value="@ticketId" />
+    }
+
+    <button type="submit" class="btn btn-primary">Підтвердити оплату</button>
+</form>
+
+<!-- Відображення валідаційних підсумків, якщо є помилки -->
+<div asp-validation-summary="All" class="text-danger"></div>

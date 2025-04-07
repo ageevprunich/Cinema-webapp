@@ -1,0 +1,47 @@
+﻿@model Cinema_webapp.Models.ViewModels.PaymentConfirmationViewModel
+
+@{
+    ViewData["Title"] = "Підтвердження оплати";
+}
+
+<h2>Підтвердження оплати</h2>
+
+<div class="alert alert-success">
+    Дякуємо! Ваш платіж успішно оброблено.
+</div>
+
+<h4>Деталі платежу:</h4>
+<ul>
+    <li><strong>Номер платежу:</strong> @Model.PaymentId</li>
+    <li><strong>Дата та час:</strong> @Model.PaymentDate.ToString("g")</li>
+    <li><strong>Спосіб оплати:</strong> @Model.PaymentMethod</li>
+    <li><strong>Сума сплачена:</strong> @string.Format("{0:0.00} грн", Model.Amount)</li>
+    <li><strong>Статус платежу:</strong> @Model.Status</li>
+</ul>
+
+<h4>Оплачені квитки:</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Фільм</th>
+            <th>Місце</th>
+            <th>Ціна, грн</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ticket in Model.Tickets)
+        {
+            <tr>
+                <td>@ticket.Showtime?.Movie?.Title</td>
+                <td>Ряд @ticket.Seat?.Row, Місце @ticket.Seat?.SeatNumber</td>
+                <td>@string.Format("{0:0.00}", ticket.Price)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="text-center mt-4">
+    <a href="/" class="btn btn-warning">⬅️ На головну</a>
+</div>
+
+<p>Ваші квитки помічено як оплачені. Ви можете переглянути їх у своєму профілі або отримати в кінотеатрі за номером платежу.</p>

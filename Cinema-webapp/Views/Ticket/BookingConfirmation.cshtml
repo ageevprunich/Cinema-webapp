@@ -17,7 +17,7 @@
 <div class="container mt-5">
     <div class="alert alert-success text-center">
         <h3>✅ Ваше бронювання підтверджено!</h3>
-        <p>Дякуємо за покупку. Нижче — деталі замовлення:</p>
+        <p>Нижче — перехід на оплату:</p>
     </div>
 
     <table class="table table-bordered table-striped mt-4">
@@ -45,6 +45,21 @@
             }
         </tbody>
     </table>
+
+    @{
+        var ticketIds = string.Join("&ticketIds=", Model.Select(t => t.Id));
+    }
+
+    @{
+        var query = string.Join("&", Model.Select(t => $"ticketIds={t.Id}"));
+        var url = Url.Action("Index", "Payment") + "?" + query;
+    }
+
+    <a href="@url" class="btn btn-success">
+        💳 Оплатити квитки
+    </a>
+
+
 
     <div class="text-center mt-4">
         <a href="/" class="btn btn-warning">⬅️ На головну</a>
