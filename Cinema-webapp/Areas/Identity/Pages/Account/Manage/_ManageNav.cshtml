@@ -1,0 +1,43 @@
+﻿@inject SignInManager<IdentityUser> SignInManager
+@inject Cinema_webapp.Data.ApplicationDbContext Db
+
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+    var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+    // Отримати RoleId з таблиці AspNetUserRoles
+    var roleId = Db.UserRoles
+        .Where(r => r.UserId == userId)
+        .Select(r => r.RoleId)
+        .FirstOrDefault();
+}
+
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Email</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
+
+    @if (roleId == "b9ce5a68-f322-4a59-84ec-10841234bbe3")  // перевірка по ID ролі
+    {
+        <li class="nav-item">
+            <a class="nav-link" id="create-movie" href="/AdminPanel">
+                Create New Movie
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" id="create-movie" href="/Showtime/Create">
+                Create New Showtime
+            </a>
+        </li>
+    }
+
+    @if (hasExternalLogins)
+    {
+        <li id="external-logins" class="nav-item">
+            <a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">
+                External logins
+            </a>
+        </li>
+    }
+</ul>

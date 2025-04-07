@@ -2,7 +2,104 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #1e1e2f, #3a3a5a);
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+    }
+
+    .hero-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #ffcc00;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            color: #ddd;
+            margin-bottom: 30px;
+        }
+
+    .cta-button {
+        background-color: #ffcc00;
+        color: #1e1e2f;
+        padding: 12px 25px;
+        font-size: 1rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        text-decoration: none;
+        margin-bottom: 10px;
+    }
+
+        .cta-button:hover {
+            background-color: #e6b800;
+        }
+
+    .movies-section {
+        padding: 60px 20px;
+        background-color: #2c2c3a;
+    }
+
+        .movies-section h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: #ffcc00;
+            margin-bottom: 30px;
+        }
+
+    table {
+        width: 90%;
+        max-width: 1000px;
+        margin: 0 auto;
+        border-collapse: collapse;
+        background-color: #3c3c50;
+        color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+    }
+
+    th, td {
+        padding: 15px 20px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #4d4d66;
+        color: #ffcc00;
+    }
+
+    tr:nth-child(even) {
+        background-color: #35354a;
+    }
+
+    tr:hover {
+        background-color: #4a4a63;
+    }
+</style>
+
+<!-- Главная секция -->
+<div class="hero-section">
+    <h1>Вітаємо в Cinema Center</h1>
+    <p>Виберіть квиток, щоб переглянути всі останні блокбастери у приголомшливій якості!</p>
+    <a href="/Movie" class="cta-button">Переглянути афішу</a>
+    <a href="/Account/Mytickets" class="cta-button">Мої квитки</a>
 </div>

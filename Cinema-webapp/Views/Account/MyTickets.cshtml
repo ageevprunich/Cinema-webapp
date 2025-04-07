@@ -1,0 +1,101 @@
+﻿@model List<Cinema_webapp.Models.Ticket>
+@{
+    ViewData["Title"] = "Мої квитки";
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["Message"]
+        </div>
+    }
+}
+
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #1e1e2f, #3a3a5a);
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+    }
+
+    .text-refunded{
+        color: red;
+    }
+</style>
+
+<h2>Мої квитки</h2>
+
+<form asp-controller="Payment" asp-action="Index" method="get">
+    <table class="table">
+        <thead class="border-white">
+            <tr>
+                <th></th>
+                <th class="text-white">Фільм</th>
+                <th class="text-white">Дата</th>
+                <th class="text-white">Зал</th>
+                <th class="text-white">Місце</th>
+                <th class="text-white">Ціна</th>
+                <th class="text-white">Статус</th>
+                <th class="text-white">Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in Model)
+            {
+                <tr>
+                    <td class="text-white">
+                        @if (ticket.Status == "Reserved")
+                        {
+                            <input type="checkbox" name="ticketIds" value="@ticket.Id" />
+                        }
+                    </td>
+                    <td class="text-white">@ticket.Showtime.Movie.Title</td>
+                    <td class="text-white">@ticket.Showtime.StartTime.ToString("g")</td>
+                    <td class="text-white">Зал #@ticket.Showtime.HallId</td>
+                    <td class="text-white">Ряд @ticket.Seat.Row, Місце @ticket.Seat.SeatNumber</td>
+                    <td class="text-white">@ticket.Price грн</td>
+                    <td class="text-white">
+                        @if (ticket.Status == "Paid")
+                        {
+                            <span class="text-success">Оплачено</span>
+                        }
+                        @if (ticket.Status == "Refunded")
+                        {
+                            <span class="text-refunded">Повернуто</span>
+                        }
+                        @if (ticket.Status == "Reserved")
+                        {
+                            <span class="text-warning">Заброньовано</span>
+                        }
+                    </td>
+                    <td class="text-white">
+                        @if (ticket.Status == "Paid")
+                        {
+                            <form asp-controller="Account" asp-action="Refund" method="post" style="display:inline;">
+                                <input type="hidden" name="ticketId" value="@ticket.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">Повернути</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <nav>
+            <ul class="pagination justify-content-center">
+                @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" href="?page=@i">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+
+    <button type="submit" class="btn btn-success">Оплатити вибрані</button>
+
+</form>

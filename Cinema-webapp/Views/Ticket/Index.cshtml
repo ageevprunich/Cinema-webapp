@@ -1,0 +1,108 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<!-- Добавь ниже остальных секций -->
+<div class="payment-section">
+    <h2>💳 Оплата квитка</h2>
+    <form method="post" action="/Payment/Submit">
+        <div class="form-group">
+            <label for="cardName">Місце</label>
+            <input type="text" id="place" name="place" required />
+        </div>
+
+        <div class="form-group">
+            <label for="cardName">Ім’я на картці</label>
+            <input type="text" id="cardName" name="cardName" required />
+        </div>
+
+        <div class="form-group">
+            <label for="cardNumber">Номер картки</label>
+            <input type="text" id="cardNumber" name="cardNumber" maxlength="19" required placeholder="XXXX XXXX XXXX XXXX" />
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="expiry">Термін дії</label>
+                <input type="text" id="expiry" name="expiry" maxlength="5" required placeholder="MM/YY" />
+            </div>
+
+            <div class="form-group">
+                <label for="cvv">CVV</label>
+                <input type="password" id="cvv" name="cvv" maxlength="4" required />
+            </div>
+        </div>
+
+        <button type="submit" class="cta-button">Оплатити</button>
+    </form>
+</div>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #1e1e2f, #3a3a5a);
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+    }
+    .payment-section {
+        padding: 60px 20px;
+        background-color: #1e1e2f;
+        color: #fff;
+        text-align: center;
+    }
+
+        .payment-section h2 {
+            font-size: 2rem;
+            color: #ffcc00;
+            margin-bottom: 30px;
+        }
+
+    form {
+        max-width: 500px;
+        margin: 0 auto;
+        text-align: left;
+        background-color: #2c2c3a;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ffcc00;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: #3c3c50;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+    .form-row {
+        display: flex;
+        gap: 20px;
+    }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+    .form-group input:focus {
+        outline: none;
+        box-shadow: 0 0 5px #ffcc00;
+    }
+</style>

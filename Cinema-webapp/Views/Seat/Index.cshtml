@@ -1,0 +1,175 @@
+﻿@model IEnumerable<Cinema_webapp.Models.Seat>
+@{
+    ViewData["Title"] = "Оберіть місця";
+    var bookedSeatIds = ViewBag.BookedSeatIds as List<int> ?? new List<int>();
+    var groupedSeats = Model.GroupBy(s => s.Row).OrderBy(g => g.Key);
+    int standardPrice = 100;
+    int vipPrice = 150;
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #1e1e2f, #3a3a5a);
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+    }
+
+    .showtime-box {
+        max-width: 1000px;
+        margin: 50px auto;
+        background-color: #2c2c3a;
+        padding: 30px;
+        border-radius: 12px;
+        color: #fff;
+        box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    }
+
+    .cinema-screen {
+        text-align: center;
+        font-weight: bold;
+        color: #ffcc00;
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: #3a3a5a;
+        border-radius: 8px;
+    }
+
+    .seating-chart {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .seat-row {
+        display: flex;
+        gap: 8px;
+    }
+
+    .seat {
+        width: 35px;
+        height: 35px;
+        background-color: #2c2c3a;
+        border: 2px solid rgba(0,0,0,0.4);
+        border-radius: 4px;
+        /* color: #fff; */
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+        .seat:hover {
+            background-color: #ffcc00;
+            color: #1e1e2f;
+        }
+
+        .seat.selected {
+            background-color: #ffcc00;
+            color: #1e1e2f;
+        }
+
+        .seat.occupied {
+            background-color: #888;
+            cursor: not-allowed;
+        }
+</style>
+
+<div class="showtime-box">
+    <h2 style="text-align: center; margin-bottom: 20px;">Оберіть місця</h2>
+    <div class="cinema-screen">Екран</div>
+
+    <div class="seating-chart">
+        @foreach (var rowGroup in groupedSeats)
+        {
+            <div class="seat-row">
+                @foreach (var seat in rowGroup.OrderBy(s => s.SeatNumber))
+                {
+                    var isBooked = bookedSeatIds.Contains(seat.Id);
+                    var classes = "seat" + (isBooked ? " occupied" : "");
+                    var price = seat.Type == "VIP" ? vipPrice : standardPrice;
+
+                    <button type="button"
+                            class="@classes"
+                            data-seat-id="@seat.Id"
+                            data-price="@price"
+                            title="Ряд @seat.Row, Місце @seat.SeatNumber (@seat.Type, @price грн)">
+                        @seat.SeatNumber
+                    </button>
+                }
+            </div>
+        }
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <h4>Сума до оплати: <span id="totalPrice">0</span> грн</h4>
+    </div>
+
+    <form id="seatForm" asp-controller="Ticket" asp-action="ConfirmBooking" method="post">
+        <input type="hidden" name="ShowtimeId" value="@ViewBag.ShowtimeId" />
+        <div id="selectedSeatsContainer"></div>
+
+        <button type="submit" class="btn btn-success" style="margin-top: 20px;">
+            ✅ Підтвердити бронювання
+        </button>
+    </form>
+</div>
+
+
+
+<script>
+    function updateTotalPrice() {
+        const selectedSeats = document.querySelectorAll('.seat.selected');
+        let total = 0;
+
+        selectedSeats.forEach(seat => {
+            const price = parseFloat(seat.getAttribute('data-price'));
+            if (!isNaN(price)) {
+                total += price;
+            }
+        });
+
+        document.getElementById('totalPrice').textContent = total;
+    }
+
+    document.querySelectorAll('.seat').forEach(seat => {
+        seat.addEventListener('click', () => {
+            if (!seat.classList.contains('occupied')) {
+                seat.classList.toggle('selected');
+                updateTotalPrice();
+            }
+        });
+    });
+
+    document.getElementById('seatForm').addEventListener('submit', function (e) {
+        const selectedSeats = document.querySelectorAll('.seat.selected');
+        const container = document.getElementById('selectedSeatsContainer');
+        container.innerHTML = '';
+
+        selectedSeats.forEach(seat => {
+            const seatId = seat.getAttribute('data-seat-id');
+            const price = seat.getAttribute('data-price');
+
+            const inputSeatId = document.createElement('input');
+            inputSeatId.type = 'hidden';
+            inputSeatId.name = 'SeatIds';
+            inputSeatId.value = seatId;
+            container.appendChild(inputSeatId);
+
+            const inputPrice = document.createElement('input');
+            inputPrice.type = 'hidden';
+            inputPrice.name = 'Prices';
+            inputPrice.value = price;
+            container.appendChild(inputPrice);
+        });
+
+        if (selectedSeats.length === 0) {
+            e.preventDefault();
+            alert("Будь ласка, виберіть хоча б одне місце!");
+        }
+    });
+</script>
+
+
+
