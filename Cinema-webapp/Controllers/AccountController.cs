@@ -14,18 +14,44 @@ public class AccountController : Controller
         _context = context;
     }
 
-    public IActionResult MyTickets()
+    //public IActionResult MyTickets()
+    //{
+    //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    //    var tickets = _context.Tickets
+    //        .Include(t => t.Seat)
+    //        .Include(t => t.Showtime).ThenInclude(s => s.Movie)
+    //        .Where(t => t.UserId == userId)
+    //        .ToList();
+
+    //    return View(tickets);
+    //}
+
+    public IActionResult MyTickets(int page = 1)
     {
+        int pageSize = 10;
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        var tickets = _context.Tickets
+        var userTickets = _context.Tickets
             .Include(t => t.Seat)
             .Include(t => t.Showtime).ThenInclude(s => s.Movie)
             .Where(t => t.UserId == userId)
+            .OrderByDescending(t => t.Showtime.StartTime); // Новіші — перші
+
+        var totalCount = userTickets.Count();
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+        var tickets = userTickets
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToList();
+
+        ViewBag.CurrentPage = page;
+        ViewBag.TotalPages = totalPages;
 
         return View(tickets);
     }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Refund(int ticketId)
@@ -36,10 +62,10 @@ public class AccountController : Controller
 
         if (ticket == null || ticket.Status != "Paid")
         {
-            return NotFound(); // або View("Error")
+            return NotFound(); 
         }
 
-        ticket.Status = "Refunded"; // або "Canceled"
+        ticket.Status = "Refunded"; 
         _context.SaveChanges();
 
         TempData["Message"] = "Квиток успішно повернено.";
