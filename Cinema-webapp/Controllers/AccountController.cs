@@ -36,10 +36,10 @@ public class AccountController : Controller
 
         if (ticket == null || ticket.Status != "Paid")
         {
-            return NotFound(); // або View("Error")
+            return NotFound(); 
         }
 
-        ticket.Status = "Refunded"; // або "Canceled"
+        ticket.Status = "Refunded"; 
         _context.SaveChanges();
 
         TempData["Message"] = "Квиток успішно повернено.";
